@@ -16,7 +16,7 @@ Its a implementation in pure python of the same system which is also available i
 ## Use cases
 This system was created with support for generic csv files and also some specific database which are of little interest for the general public. Enough to say that any database that can be turned into a pandas DataFrame can be used as input.  
 
-## Data driven template
+## About the data driven template
 The aggregation is defined by a template where each row defines a operation using a variable of the input table.  
 The operations are:  
  - breakdown (default, group all values with this key)
@@ -27,6 +27,9 @@ The operations are:
  - count
  - major (TBI, present on other implementations of this system)
  - list (TBI)
+The output name of a column may be defined using the "=" operator. Ex.: if i am calculation a `mass` column using a `volume` column using a `density` column as weight, i may define that the output column will be appropriated named by using the following pattern:  
+`volume=mass,sum,density`  
+
 
 ## Example
 Input:  
