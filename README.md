@@ -36,18 +36,18 @@ The output name of a column may be defined using the "=" operator. Ex.: if i am 
 ## Example 1
 Density weighted by hole length  
 ### Input:  
- | holeid	 | from	 | to	 | length	 | tipo	 | 
- | ---	 | ---	 | ---	 | ---	 | ---	 | 
- | AAA	 | 0	 | 5	 | 5	 | it	 | 
- | AAA	 | 5	 | 10	 | 5	 | it	 | 
- | AAA	 | 10	 | 15	 | 5	 | he	 | 
- | AAA	 | 15	 | 20	 | 5	 | he	 | 
- | AAA	 | 20	 | 25	 | 5	 | he	 | 
- | AAA	 | 25	 | 30	 | 5	 | he	 | 
- | BBB	 | 0	 | 10	 | 10	 | it	 | 
- | BBB	 | 10	 | 20	 | 10	 | he	 | 
- | BBB	 | 20	 | 30	 | 10	 | it	 | 
- | BBB	 | 30	 | 40	 | 10	 | 	 | 
+ | holeid	 | from	 | to	 | length | dens | tipo	 | 
+ | ---	 | ---	 | ---	 | ---	 | --- | ---	 | 
+ | AAA	 | 0	 | 5	 | 5	 | 2.4 | it	 | 
+ | AAA	 | 5	 | 10	 | 5	 | 2.4 | it	 | 
+ | AAA	 | 10	 | 15	 | 5	 | 2.4 | he	 | 
+ | AAA	 | 15	 | 20	 | 5	 | 2.6 | he	 | 
+ | AAA	 | 20	 | 25	 | 5	 | 2.6 | he	 | 
+ | AAA	 | 25	 | 30	 | 5	 | 2.6 | he	 | 
+ | BBB	 | 0	 | 10	 | 10	 | 2.5 | it	 | 
+ | BBB	 | 10	 | 20	 | 10	 | 2.4 | he	 | 
+ | BBB	 | 20	 | 30	 | 10	 | 2.6 | it	 | 
+ | BBB	 | 30	 | 40	 | 10	 | 	 |   |
 ### Template:  
 ![template_simple](https://github.com/pemn/breakdown/blob/master/assets/asset2simple.png)  
 ### Output:
