@@ -4,11 +4,10 @@ Leverages pandas for the groupby() function and general DataFrame utilities.
 Provides funcionality similar with pandas pivot_table but with the option to specify one or more weight fields using a custom data driven template.
 
 # How to use
-This system was created with support for generic csv files and also some specific database which are of little interest for the general public. Enough to say that any database that can be turned into a pandas DataFrame can be used as input.
+This system was created with support for generic csv files and also some specific database which are of little interest for the general public. Enough to say that any database that can be turned into a pandas DataFrame can be used as input.  
 
 # Example
 Input:  
-
 
  | class1	 | class2	 | num1	 | num2	 | weight1	 | weight2	|
  | ---	 | ---	 | ---	 | ---	 | ---	 | ---	|
@@ -23,9 +22,9 @@ Input:
  
  
 Template:  
-![template_grid](https://github.com/pemn/breakdown/blob/master/assets/asset1grid.png)
-Output:  
+![template_grid](https://github.com/pemn/breakdown/blob/master/assets/asset1grid.png)  
 
+Output:  
 
  | class1	 | class2	 | num1	 | num2	 | num1w1	 | num2w1	 | num1	 | num2	 | num1w1	 | num2w1	 | num1w1w2	 | num2w1w2	 | num1w1w2	 | num2w1w2	|
  | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	|
