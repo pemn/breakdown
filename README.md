@@ -27,6 +27,7 @@ The operations are:
  - count
  - major (TBI, present on other implementations of this system)
  - list (TBI)  
+ 
 The output name of a column may be defined using the "=" operator. Ex.: if i am calculation a `mass` column using a `volume` column using a `density` column as weight, i may define that the output column will be appropriated named by using the following pattern:  
 `volume=mass,sum,density`  
 
