@@ -52,13 +52,14 @@ Density weighted by hole length
 ![template_simple](https://github.com/pemn/breakdown/blob/master/assets/asset2simple.png)  
 ### Output:
  | tipo	 | dens	 | 
- | 	 | mean	 | 
  | ---	 | ---	 | 
+ | 	 | mean	 | 
  | he	 | 2.5	 | 
  | it	 | 2.5	 | 
 
 
 ## Example 2
+Artificial data to highlight the different results. Useful for automated testing.  
 ### Input:  
 
  | class1	 | class2	 | num1	 | num2	 | weight1	 | weight2	|
