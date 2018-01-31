@@ -1,10 +1,22 @@
 # Description
-Provides a powerfull system to create weighted pivot tables and reports.  
+Provides a powerfull system to create weighted pivot tables, aggregations and reports.  
 Leverages pandas for the groupby() function and general DataFrame utilities.  
 Provides funcionality similar with pandas pivot_table but with the option to specify one or more weight fields using a custom data driven template.
 
-# How to use
+# Use cases
 This system was created with support for generic csv files and also some specific database which are of little interest for the general public. Enough to say that any database that can be turned into a pandas DataFrame can be used as input.  
+
+# Data driven template
+The aggregation is defined by a template where each row defines a operation using a variable of the input table.  
+The operations are:  
+ - breakdown (default, group all values with this key)
+ - mean (simple or weighted)
+ - sum (simple or weighted)
+ - min
+ - max
+ - count
+ - major (TBI, present on other implementations of this system)
+ - list (TBI)
 
 # Example
 Input:  
