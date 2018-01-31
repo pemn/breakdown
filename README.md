@@ -8,6 +8,8 @@ Its a implementation in pure python of the same system which is also available i
  - Create pivot tables using weighted values.
  - Aggregation of values using a easy to assemble, plain text.
  - Very fast due to the numpy/pandas backend handling database I/O.
+ - Hard condition filter on the input data.
+ - Soft masking of undesired/invalid values.
  - Small code base, leveraging already existing funcionality in the python ecosystem.
  - Template system compatible with my other implementations of this system (read above).
  - Built-in GUI using the libraries from my other project [usage-gui](https://github.com/pemn/usage-gui).
