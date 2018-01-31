@@ -10,7 +10,8 @@ Its a implementation in pure python of the same system which is also available i
  - Very fast due to the numpy/pandas backend handling database I/O.
  - Small code base, leveraging already existing funcionality in the python ecosystem.
  - Template system compatible with my other implementations of this system (read above).
- - Built-in GUI using the libraries from my other project [usage-gui](https://github.com/pemn/usage-gui)
+ - Built-in GUI using the libraries from my other project [usage-gui](https://github.com/pemn/usage-gui).
+ - Command line arguments supported as a first-class citizen.
 
 ## Use cases
 This system was created with support for generic csv files and also some specific database which are of little interest for the general public. Enough to say that any database that can be turned into a pandas DataFrame can be used as input.  
