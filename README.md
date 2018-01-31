@@ -1,12 +1,20 @@
-# Description
+# Breakdown
 Provides a powerfull system to create weighted pivot tables, aggregations and reports.  
 Leverages pandas for the groupby() function and general DataFrame utilities.  
-Provides funcionality similar with pandas pivot_table but with the option to specify one or more weight fields using a custom data driven template.
+Provides funcionality similar with pandas pivot_table but with the option to specify one or more weight fields using a custom data driven template.  
+Its a implementation in pure python of the same system which is also available in [Perl](https://github.com/pemn/Namedtable) and [HTML5](https://github.com/pemn/ui_grid_breakdown)
 
-# Use cases
+## Features
+ - Create pivot tables using weighted values.
+ - Aggregation of values using a easy to assemble, plain text.
+ - Very fast due to the numpy/pandas backend handling database I/O.
+ - Small code base, leveraging already existing funcionality in the python ecosystem.
+ - Template system compatible with my other implementations of this system (read above).
+
+## Use cases
 This system was created with support for generic csv files and also some specific database which are of little interest for the general public. Enough to say that any database that can be turned into a pandas DataFrame can be used as input.  
 
-# Data driven template
+## Data driven template
 The aggregation is defined by a template where each row defines a operation using a variable of the input table.  
 The operations are:  
  - breakdown (default, group all values with this key)
@@ -18,7 +26,7 @@ The operations are:
  - major (TBI, present on other implementations of this system)
  - list (TBI)
 
-# Example
+## Example
 Input:  
 
  | class1	 | class2	 | num1	 | num2	 | weight1	 | weight2	|
