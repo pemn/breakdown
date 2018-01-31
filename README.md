@@ -33,9 +33,33 @@ The operations are:
 The output name of a column may be defined using the "=" operator. Ex.: if i am calculation a `mass` column using a `volume` column using a `density` column as weight, i may define that the output column will be appropriated named by using the following pattern:  
 `volume=mass,sum,density`  
 
+## Example 1
+Density weighted by hole length  
+### Input:  
+ | holeid	 | from	 | to	 | length	 | tipo	 | 
+ | ---	 | ---	 | ---	 | ---	 | ---	 | 
+ | AAA	 | 0	 | 5	 | 5	 | it	 | 
+ | AAA	 | 5	 | 10	 | 5	 | it	 | 
+ | AAA	 | 10	 | 15	 | 5	 | he	 | 
+ | AAA	 | 15	 | 20	 | 5	 | he	 | 
+ | AAA	 | 20	 | 25	 | 5	 | he	 | 
+ | AAA	 | 25	 | 30	 | 5	 | he	 | 
+ | BBB	 | 0	 | 10	 | 10	 | it	 | 
+ | BBB	 | 10	 | 20	 | 10	 | he	 | 
+ | BBB	 | 20	 | 30	 | 10	 | it	 | 
+ | BBB	 | 30	 | 40	 | 10	 | 	 | 
+### Template:  
+![template_simple](https://github.com/pemn/breakdown/blob/master/assets/asset2simple.png)  
+### Output:
+ | tipo	 | dens	 | 
+ | 	 | mean	 | 
+ | ---	 | ---	 | 
+ | he	 | 2.5	 | 
+ | it	 | 2.5	 | 
 
-## Example
-Input:  
+
+## Example 2
+### Input:  
 
  | class1	 | class2	 | num1	 | num2	 | weight1	 | weight2	|
  | ---	 | ---	 | ---	 | ---	 | ---	 | ---	|
@@ -49,12 +73,12 @@ Input:
  | B	 | F	 | 8	 | 4	 | 8	 | 2	|
  
  
-Template:  
+### Template:  
 ![template_grid](https://github.com/pemn/breakdown/blob/master/assets/asset1grid.png)  
 Command Line (created automatically by the interface if desired):  
 `python bm_breakdown.py breakdown_test.csv "" "class1,breakdown,;class2,breakdown,;num1,mean,;num2,mean,;num1=num1w1,mean,weight1;num2=num2w1,mean,weight1;num1,sum,;num2,sum,;num1=num1w1,sum,weight1;num2=num2w1,sum,weight1;num1=num1w1w2,mean,weight1,weight2;num2=num2w1w2,mean,weight1,weight2;num1=num1w1w2,sum,weight1,weight2;num2=num2w1w2,sum,weight1,weight2" breakdown_test_output.xlsx`
 
-Output:  
+### Output:  
 
  | class1	 | class2	 | num1	 | num2	 | num1w1	 | num2w1	 | num1	 | num2	 | num1w1	 | num2w1	 | num1w1w2	 | num2w1w2	 | num1w1w2	 | num2w1w2	|
  | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	|
