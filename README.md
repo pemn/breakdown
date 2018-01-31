@@ -45,16 +45,20 @@ Input:
  
 Template:  
 ![template_grid](https://github.com/pemn/breakdown/blob/master/assets/asset1grid.png)  
+Command Line (created automatically by the interface if desired):  
+`python bm_breakdown.py breakdown_test.csv "" "class1,breakdown,;class2,breakdown,;num1,mean,;num2,mean,;num1=num1w1,mean,weight1;num2=num2w1,mean,weight1;num1,sum,;num2,sum,;num1=num1w1,sum,weight1;num2=num2w1,sum,weight1;num1=num1w1w2,mean,weight1,weight2;num2=num2w1w2,mean,weight1,weight2;num1=num1w1w2,sum,weight1,weight2;num2=num2w1w2,sum,weight1,weight2" breakdown_test_output.xlsx`
 
 Output:  
 
  | class1	 | class2	 | num1	 | num2	 | num1w1	 | num2w1	 | num1	 | num2	 | num1w1	 | num2w1	 | num1w1w2	 | num2w1w2	 | num1w1w2	 | num2w1w2	|
  | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	 | ---	|
- | A	 | C	 | 1.5	 | 1	 | 1.66666666666666	 | 1	 | 3	 | 2	 | 5	 | 3	 | 1.8	 | 1	 | 9	 | 5	|
- | A	 | D	 | 3.5	 | 2	 | 3.57142857142857	 | 2	 | 7	 | 4	 | 25	 | 14	 | 3.72727272727272	 | 2	 | 41	 | 22	|
- | B	 | E	 | 5.5	 | 3	 | 5.54545454545454	 | 3	 | 11	 | 6	 | 61	 | 33	 | 5.70588235294117	 | 3	 | 97	 | 51	|
- | B	 | F	 | 7.5	 | 4	 | 7.53333333333333	 | 4	 | 15	 | 8	 | 113	 | 60	 | 7.69565217391304	 | 4	 | 177	 | 92	|
- 
- 
+ | 	 | 	 | mean	 | mean	 | mean	 | mean	 | sum	 | sum	 | sum	 | sum	 | mean	 | mean	 | sum	 | sum	|
+ | 	 | 	 | 	 | 	 | 	 | 	 | 	 | 	 | 	 | 	 | 	 | 	 | 	 | 	|
+ | A	 | C	 | 1.5	 | 1	 | 1.66666666666667	 | 1	 | 3	 | 2	 | 5	 | 3	 | 1.8	 | 1	 | 9	 | 5	|
+ | 	 | D	 | 3.5	 | 2	 | 3.57142857142857	 | 2	 | 7	 | 4	 | 25	 | 14	 | 3.72727272727273	 | 2	 | 41	 | 22	|
+ | B	 | E	 | 5.5	 | 3	 | 5.54545454545455	 | 3	 | 11	 | 6	 | 61	 | 33	 | 5.70588235294118	 | 3	 | 97	 | 51	|
+ | 	 | F	 | 7.5	 | 4	 | 7.53333333333333	 | 4	 | 15	 | 8	 | 113	 | 60	 | 7.69565217391304	 | 4	 | 177	 | 92	|
+
+
  
 
