@@ -34,7 +34,7 @@ The output name of a column may be defined using the "=" operator. Ex.: if i am 
 `volume=mass,sum,density`  
 
 ## Example 1
-Density weighted by hole length  
+Density weighted by hole length. The last row is intentionally empty and will be considered NAN.  
 ### Input:  
  | holeid	 | from	 | to	 | length | dens | tipo	 | 
  | ---	 | ---	 | ---	 | ---	 | --- | ---	 | 
