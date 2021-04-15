@@ -49,7 +49,7 @@ Density weighted by hole length. The last row is intentionally empty and will be
  | BBB	 | 20	 | 30	 | 10	 | 2.6 | it	 | 
  | BBB	 | 30	 | 40	 | 10	 | 	 |   |
 ### Template:  
-![template_simple](https://github.com/pemn/breakdown/blob/master/assets/asset2simple.png)  
+![template_simple](./assets/asset2simple.png?raw=true)  
 ### Output:
  | tipo	 | dens	 | 
  | ---	 | ---	 | 
@@ -75,7 +75,7 @@ Artificial data to highlight the different results. Useful for automated testing
  
  
 ### Template:  
-![template_grid](https://github.com/pemn/breakdown/blob/master/assets/asset1grid.png)  
+![template_grid](./assets/asset1grid.png?raw=true)  
 Command Line (created automatically by the interface if desired):  
 `python bm_breakdown.py breakdown_test.csv "" "class1,breakdown,;class2,breakdown,;num1,mean,;num2,mean,;num1=num1w1,mean,weight1;num2=num2w1,mean,weight1;num1,sum,;num2,sum,;num1=num1w1,sum,weight1;num2=num2w1,sum,weight1;num1=num1w1w2,mean,weight1,weight2;num2=num2w1w2,mean,weight1,weight2;num1=num1w1w2,sum,weight1,weight2;num2=num2w1w2,sum,weight1,weight2" breakdown_test_output.xlsx`
 
