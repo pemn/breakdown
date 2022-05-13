@@ -4,33 +4,60 @@
 # condition: optional expression to filter. syntax is vulcan or python (csv,isis)
 # variables: variables to generate the pivot table in the breakdown format
 # output: optional files to write the result, csv and/or xlsx
+# keep_null: dont exclude -99 values from calculations
+# v1.1 04/2018 paulo.ernesto
+# v1.0 12/2017 paulo.ernesto
 '''
-usage: $0 input*bmf,csv,isis condition variables#variable:input#type=breakdown,count,sum,mean,min,max,var,std,sem,q1,q2,q3#weight:input output*csv,xlsx
+usage: $0 input*bmf,csv,xlsx,json,isis,dm,tif,tiff,00t,obj condition variables#variable:input#type=breakdown,count,sum,mean,min,max,var,std,sem,q1,q2,q3,p10,p90,major,list,text,group#weight:input keep_null@ output*csv,xlsx
 '''
-import sys
-import pandas as pd
-import numpy as np
+'''
+Copyright 2017 - 2021 Vale
 
-from _gui import usage_gui, pd_get_dataframe, table_field, commalist
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+'''
+
+import sys, os.path
+import numpy as np
+import pandas as pd
+
+# import modules from a pyz (zip) file with same name as scripts
+sys.path.insert(0, os.path.splitext(sys.argv[0])[0] + '.pyz')
+
+from _gui import usage_gui, pd_load_dataframe, table_field, commalist, pd_save_dataframe, log
 
 # magic character that will be the label separator
 _LABEL = '='
 
-def bm_breakdown(input_path, condition, vl_s):
+def bm_breakdown(input_path, condition, vl_s, keep_null = False):
   ''' 
   File entry point for the breakdown process
   Input: path to input file, condition string, variable list string
   Output: dataframe with result
   '''
-
   vl_a = commalist().parse(vl_s)
-  print("# bm_breakdown", input_path)
+  log("# bm_breakdown", input_path)
   if input_path.lower().endswith('.isis'):
-    idf = pd_get_dataframe(input_path, condition, table_field(vl_a[0][0], True))
+    idf = pd_load_dataframe(input_path, condition, table_field(vl_a[0][0], True), None, keep_null)
     vl_a = table_field(vl_a)
   else:
-    idf = pd_get_dataframe(input_path, condition, [_[0].split(_LABEL)[0] for _ in vl_a])
+    vl_s = set()
+    for row in vl_a:
+      # extract all unique variables from the breakdown mask
+      # skip the operation column
+      vl_s.update([row[j].split(_LABEL)[0] for j in range(len(row)) if j != 1])
 
+    idf = pd_load_dataframe(input_path, condition, None, vl_s, keep_null)
+  log("# finished")
   return pd_breakdown(idf, vl_a)
 
 def pd_breakdown(idf, vl_a):
@@ -50,36 +77,61 @@ def pd_breakdown(idf, vl_a):
   for v in vl_a:
     # create a copy of the row to avoid modifing the input
     v = list(v)
-    name = v[0]
-    # handle alternative column names. Ex.: volume:total_volume
-    if len(name) > name.find(_LABEL) > 0:
-      v[0], name = name.split(_LABEL)
+    v0 = v[0]
+    name = ''
+
+    # handle alternative column names. Ex.: volume=total_volume
+    if len(v0) and v0.find(_LABEL) > 0:
+      v0, name = v0.split(_LABEL)
 
     if len(v) == 1 or v[1] == 'breakdown' or len(v[1]) == 0:
-      vl_b.append(v[0])
-      col_b.append(name)
+      vl_b.append(v0)
+      if name:
+        col_b.append(name)
+      else:
+        col_b.append(v0)
+    elif v[1] == 'group':
+      # similar to breakdown but respecting local value domains
+      g0 = np.cumsum(idf[v0] != idf[v0].shift())
+      g1 = pd.Series.drop_duplicates(g0)
+      g1[:] = g1.index
+      g2 = g1.reindex(idf.index, method='ffill')
+      #vl_b.append(['%s_%d' % _ for _ in zip(idf.loc[g2, v0].values, g0)])
+      vl_b.append(idf.loc[g2, v0].values)
+      vl_b.append(g0)
+      if name:
+        col_b.append(name)
+      else:
+        col_b.append(v0)
+      col_b.append(v0 + '#')
     else:
-      vl_v.append(list(v))
-      col_v.append([name,v[1]])
-
+      if name:
+        col_v.append(name)
+        vl_v.append([v0] + v[1:])
+      elif v[1] == 'text':
+        col_v.append(v0)
+        vl_v.append(v)
+      else:
+        col_v.append(v0 + ' ' + v[1])
+        vl_v.append(v)
   if len(vl_v) == 0 and len(vl_b) > 0:
-    vl_v = [[_,"text","-"] for _ in vl_b]
-    col_v = [[_,"text"] for _ in col_b]
+    vl_v = [['','text',''] for _ in vl_b]
+    col_v = ['' for _ in vl_b]
 
-  # the breakdown columns will become a multiindex instead of actual data on the output
-  r_row = None
+  r_row = []
   if vl_b:
-    r_row = []
-    for gp,df in idf.groupby(vl_b):
+    for gp,df in idf.groupby(vl_b, dropna=False):
       if not isinstance(gp, tuple):
         gp = [gp]
       r_row.append(gp)
       r.append(pd_breakdown_fn(df, vl_v))
-    r_row = pd.MultiIndex.from_arrays(list(zip(*r_row)), names=col_b)
+    if r_row:
+      r_row = pd.MultiIndex.from_arrays(list(zip(*r_row)), names=col_b)
   else:
+    r_row.append('')
     r.append(pd_breakdown_fn(idf, vl_v))
-  
-  return(pd.DataFrame(r, index=r_row, columns=pd.MultiIndex.from_arrays(list(zip(*col_v)))))
+
+  return(pd.DataFrame(r, index=r_row, columns=col_v))
 
 def weighted_quantiles(a, q=[0.25], w=None):
     """
@@ -118,7 +170,6 @@ def weighted_quantiles(a, q=[0.25], w=None):
     ecdf = np.cumsum(w_sort)
 
     # Find the percentile index positions associated with the percentiles
-    #p = q * (w.sum() - 1)
     p = q * (np.nansum(w) - 1)
 
     # Find the bounding indices (both low and high)
@@ -163,56 +214,55 @@ def pd_breakdown_fn(df, vl):
       elif w in df:
         wt.append(w)
 
-    # handle the case where any weight is still comma separated
-    v = None
+    v = np.nan
     if mode == "text":
       # constant value, taken as raw text from the weight field
-      if wt:
-        v = ' '.join(wt)
+      if len(a) > 2:
+        v = a[2]
       else:
         v = name
     elif name not in df:
-      # trap special case: unknown var, will keep the default value of None
+      # trap special case: unknown var, will keep the default value of NaN
       pass
+    elif mode == "list":
+      v = ','.join(df[name].unique())
     elif wt and mode == "sum":
       # weighted sum
-      v = np.nansum(np.prod([df[_].values for _ in [name] + wt], 0))
+      # python 2.5 does not support to_numpy
+      v = np.nansum(np.prod([df[_].values.astype(np.float_) for _ in [name] + wt], 0))
     elif wt and mode == "mean":
       # boolean indexing of non-nan values
-      bi = ~ np.isnan(df[name].values)
-      ws = np.prod([df[_].values[bi] for _ in wt], 0)
-      if np.sum(ws) != 0:
+      #bi = ~ np.isnan(df[name].values)
+      bi = pd.Series.notnull(df[name])
+      ws = np.array([df.loc[bi, _].values.astype(np.float_) for _ in wt])
+      if len(wt) > 1:
+        ws = np.prod(np.array(ws), 0)
+      else:
+        ws = ws.flat
+      if np.nansum(ws) != 0:
         # weighted mean
-        v = np.average(df[name].values[bi], None, ws)
+        v = np.average(df.loc[bi, name].values.astype(np.float_), None, np.nan_to_num(ws))
     elif wt and mode in ["q1", "q2", "q3"]:
       q = (["q1", "q2", "q3"].index(mode) + 1) * 0.25
       v = weighted_quantiles(df[name].values, [q], np.prod([df[_].values for _ in wt], 0))[0]
     elif hasattr(pd.Series, mode):
       fn = eval('pd.Series.' + mode)
-      v = fn(df[name])
+      v = fn(df[name].astype(np.float_))
+    elif mode == 'major':
+      if df[name].any():
+        v = df[name].value_counts().idxmax()
+
     elif mode in ["q1", "q2", "q3"]:
       q = (["q1", "q2", "q3"].index(mode) + 1) * 0.25
       v = df[name].quantile(q)
+    elif mode.startswith('p') and str.isnumeric(mode[1:]):
+      v = np.percentile(df[name], float(mode[1:]))
 
     r.append(v)
   return(r)
 
 def main(*args):
-  odf = bm_breakdown(args[0], args[1], args[2])
-  output = args[3]
-
-  # screen
-  if(odf.size > 0):
-    print(odf.to_string(na_rep = ""))
-    # Excel sheet
-    if output.lower().endswith('.xlsx'):
-      odf.to_excel(output)
-    elif len(output) > 0:
-      odf.reset_index(inplace=True)
-      odf.columns = odf.columns.droplevel(1)
-      odf.to_csv(output, index=False)
-  else:
-    print(output,"empty")
+  pd_save_dataframe(bm_breakdown(args[0], args[1], args[2], args[3]), args[4])
 
 if __name__=="__main__" and sys.argv[0].endswith('bm_breakdown.py'):
   usage_gui(__doc__)
