@@ -34,7 +34,8 @@ The operations are:
  
 The output name of a column may be defined using the "=" operator. Ex.: if i am calculation a `mass` column using a `volume` column using a `density` column as weight, i may define that the output column will be appropriated named by using the following pattern:  
 `volume=mass,sum,density`  
-
+## Screenshot
+![screenshot1](./assets/bm_breakdown1.png?raw=true)  
 ## Example 1
 Density weighted by hole length. The last row is intentionally empty and will be considered NAN.  
 ### Input:  
