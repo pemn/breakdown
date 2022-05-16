@@ -22,14 +22,15 @@ This system was created with support for generic csv files and also some specifi
 The aggregation is defined by a template where each row defines a operation using a variable of the input table.  
 The operations are:  
  - breakdown: default, group all values with this key
- - group: similar to breakdown, but only groups sequential values. usefull for preserving distinct data intervals.
+ - group: similar to breakdown, but only groups sequential values. usefull for preserving regionally distinct data intervals.
  - mean (simple or weighted if a weight is provided)
  - sum (simple or weighted if a weight is provided)
  - min
  - max
  - count
  - major: use the most common value
- - list: create a comma sepparated list of all values
+ - list: create a comma sepparated list of all unique values. ordered by number of occurrences.
+ - rank: create a comma separated list of proportion for each unique value. if a weight is supplied the proportion will be its sum.
  
 The output name of a column may be defined using the "=" operator. Ex.: if i am calculation a `mass` column using a `volume` column using a `density` column as weight, i may define that the output column will be appropriated named by using the following pattern:  
 `volume=mass,sum,density`  
