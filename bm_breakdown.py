@@ -8,7 +8,7 @@
 # v1.1 04/2018 paulo.ernesto
 # v1.0 12/2017 paulo.ernesto
 '''
-usage: $0 input*bmf,csv,xlsx,json,isis,dm,tif,tiff,00t,obj condition variables#variable:input#type=breakdown,count,sum,mean,min,max,var,std,sem,q1,q2,q3,p10,p90,major,list,text,group#weight:input keep_null@ output*csv,xlsx
+usage: $0 input*bmf,csv,xlsx,json,isis,dm,tif,tiff,00t,obj condition variables#variable:input#type=breakdown,count,sum,mean,min,max,var,std,sem,q1,q2,q3,p10,p90,major,list,rank,text,group#weight:input keep_null@ output*csv,xlsx
 '''
 '''
 Copyright 2017 - 2021 Vale
@@ -225,11 +225,20 @@ def pd_breakdown_fn(df, vl):
       # trap special case: unknown var, will keep the default value of NaN
       pass
     elif mode == "list":
-      v = ','.join(df[name].unique())
+      # TODO: sort by weight when a weight was supplied
+      v = ','.join(map(str, df[name].value_counts().index))
+    elif mode == "rank":
+      s = None
+      if wt:
+        s = np.prod(pd.pivot_table(df, wt, name), 0)
+      else:
+        s = df[name].value_counts()
+      v = ','.join(map(lambda _: '%.2f' % _, s / s.sum()))
     elif wt and mode == "sum":
       # weighted sum
       # python 2.5 does not support to_numpy
-      v = np.nansum(np.prod([df[_].values.astype(np.float_) for _ in [name] + wt], 0))
+      #v = np.nansum(np.prod([df[_].values.astype(np.float_) for _ in [name] + wt], 0))
+      v = np.nansum(np.prod(df[[name] + wt].values.astype(np.float_), 0))
     elif wt and mode == "mean":
       # boolean indexing of non-nan values
       #bi = ~ np.isnan(df[name].values)
